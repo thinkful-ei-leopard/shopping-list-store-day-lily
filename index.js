@@ -1,3 +1,4 @@
+'use strict';
 const store = {
   items: [
     { id: cuid(), name: 'apples', checked: false },
@@ -25,6 +26,9 @@ const generateItemElement = function (item) {
         </button>
         <button class='shopping-item-delete js-item-delete'>
           <span class='button-label'>delete</span>
+        </button>
+        <button class='shopping-item-edit js-item-edit'> 
+          <span class='button-label'>edit</span>
         </button>
       </div>
     </li>`;
@@ -145,6 +149,26 @@ const handleToggleFilterClick = function () {
   });
 };
 
+const getNameFromFromId = function (id, name){
+  const index = store.items.findIndex(item => item.id === id);
+  store.items[index].name = name;
+};
+
+//where I will handle what user will input?
+const editClickFunction = function (name) {
+  console.log(`${name} within edit click function`);
+  console.log('edit click function is running');
+};
+
+const handleEditClick = function () {
+  $('.js-shopping-list').on('click', '.js-item-edit', event => {
+    const name = getItemIdFromElement(event.currentTarget);
+    editClickFunction(name);
+    getNameFromFromId(event.currentTarget);
+    console.log('handle edit is running');
+  });
+};
+
 /**
  * This function will be our callback when the
  * page loads. It is responsible for initially 
@@ -160,6 +184,8 @@ const handleShoppingList = function () {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleFilterClick();
+  handleDeleteItemClicked();
+  handleEditClick();
 };
 
 // when the page loads, call `handleShoppingList`

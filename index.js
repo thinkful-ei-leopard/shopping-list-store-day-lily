@@ -13,7 +13,9 @@ const generateItemElement = function (item) {
   let itemTitle = `<span class='shopping-item shopping-item__checked'>${item.name}</span>`;
   if (!item.checked) {
     itemTitle = `
-     <span class='shopping-item'>${item.name}</span>
+    <form class="js-edit-item">
+     <input class="shopping-item" type="text" value="${item.name}" />
+    </form>
     `;
   }
 
@@ -149,23 +151,18 @@ const handleToggleFilterClick = function () {
   });
 };
 
-const getNameFromFromId = function (id, name){
-  const index = store.items.findIndex(item => item.id === id);
-  store.items[index].name = name;
+const editListItemName = function (id, itemName) {
+  const item = store.items.find(item => item.id === id);
+  item.name = itemName;
 };
 
-//where I will handle what user will input?
-const editClickFunction = function (name) {
-  console.log(`${name} within edit click function`);
-  console.log('edit click function is running');
-};
-
-const handleEditClick = function () {
-  $('.js-shopping-list').on('click', '.js-item-edit', event => {
-    const name = getItemIdFromElement(event.currentTarget);
-    editClickFunction(name);
-    getNameFromFromId(event.currentTarget);
-    console.log('handle edit is running');
+const handleEditShoppingItemSubmit = function () {
+  $('.js-shopping-list').on('submit', '.js-edit-item', event => {
+    event.preventDefault();
+    const id = getItemIdFromElement(event.currentTarget);
+    const itemName = $(event.currentTarget).find('.shopping-item').val();
+    editListItemName(id, itemName);
+    render();
   });
 };
 
@@ -185,7 +182,7 @@ const handleShoppingList = function () {
   handleDeleteItemClicked();
   handleToggleFilterClick();
   handleDeleteItemClicked();
-  handleEditClick();
+  handleEditShoppingItemSubmit();
 };
 
 // when the page loads, call `handleShoppingList`
